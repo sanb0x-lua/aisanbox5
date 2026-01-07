@@ -41,20 +41,11 @@ function init() {
     }
     animateBackground();
 
-    // Автоматическое движение
-    let isAutoPressActive = false;
-    let autoPressInterval = null;
-    const toggleBtn = document.getElementById('toggleBtn');
-    const btnStatus = document.querySelector('.btn-status');
-    
-    const keys = ['w', 'd', 's', 'a']; // вперед, вправо, назад, влево
-    let keyIndex = 0;
-
+    // Обработчик нажатия клавиш
     function pressKey(key) {
-        const keyCode = {'w': 87, 'd': 68, 's': 83, 'a': 65}[key];
-        const keyName = {'w': 'KeyW', 'd': 'KeyD', 's': 'KeyS', 'a': 'KeyA'}[key];
+        const keyCode = {'w': 87, 'd': 68, 's': 83, 'a': 65, ' ': 32}[key];
+        const keyName = {'w': 'KeyW', 'd': 'KeyD', 's': 'KeyS', 'a': 'KeyA', ' ': 'Space'}[key];
         
-        // Нажимаем клавишу
         const downEvent = new KeyboardEvent('keydown', {
             key: key,
             code: keyName,
@@ -64,7 +55,6 @@ function init() {
             cancelable: true
         });
         
-        // Отпускаем клавишу
         const upEvent = new KeyboardEvent('keyup', {
             key: key,
             code: keyName,
@@ -82,36 +72,17 @@ function init() {
             document.dispatchEvent(upEvent);
             document.body.dispatchEvent(upEvent);
             window.dispatchEvent(upEvent);
-        }, 500);
+        }, 200);
     }
 
-    function toggleAutoPress() {
-        isAutoPressActive = !isAutoPressActive;
-        
-        if (isAutoPressActive) {
-            toggleBtn.classList.add('active');
-            btnStatus.textContent = 'Включено';
-            keyIndex = 0;
-            
-            // Меняем направление каждые 3 секунды
-            autoPressInterval = setInterval(() => {
-                pressKey(keys[keyIndex]);
-                keyIndex = (keyIndex + 1) % keys.length;
-            }, 3000);
-        } else {
-            toggleBtn.classList.remove('active');
-            btnStatus.textContent = 'Выключено';
-            
-            if (autoPressInterval) {
-                clearInterval(autoPressInterval);
-                autoPressInterval = null;
-            }
-        }
-    }
-
-    btnStatus.textContent = 'Выключено';
-    toggleBtn.classList.remove('active');
-    toggleBtn.addEventListener('click', toggleAutoPress);
+    // Добавляем обработчики к кнопкам
+    const buttons = document.querySelectorAll('.action-btn');
+    buttons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const key = btn.getAttribute('data-key');
+            pressKey(key);
+        });
+    });
 
     // Footer text
     const footerText = document.getElementById('footerText');

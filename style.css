@@ -208,45 +208,53 @@ header {
 .controls {
     display: flex;
     justify-content: center;
-    gap: 20px;
+    gap: 15px;
     margin-bottom: 50px;
     animation: fadeIn 0.8s ease-out 0.3s both;
+    flex-wrap: wrap;
 }
 
-.control-btn {
-    background: linear-gradient(135deg, #ff4444, #cc0000);
-    border: 2px solid #ffb3b3;
-    border-radius: 15px;
+.action-btn {
+    background: linear-gradient(135deg, #6842ff, #5030cc);
+    border: 2px solid #9370ff;
+    border-radius: 12px;
     color: white;
-    padding: 20px 50px;
-    font-size: 1.3rem;
+    width: 60px;
+    height: 60px;
+    font-size: 1.8rem;
     font-family: inherit;
     cursor: pointer;
     font-weight: bold;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
     position: relative;
-    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    active: none;
 }
 
-.control-btn:hover {
-    transform: translateY(-5px) scale(1.05);
-    box-shadow: 0 15px 40px rgba(255, 68, 68, 0.5);
-    border-color: #ff9f9f;
+.action-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 10px 30px rgba(104, 66, 255, 0.5);
+    border-color: #b89fff;
 }
 
-.control-btn.active {
-    background: linear-gradient(135deg, #00cc44, #009933);
-    border-color: #66ff99;
+.action-btn:active {
+    transform: scale(0.95);
+    box-shadow: 0 5px 15px rgba(104, 66, 255, 0.7);
 }
 
-.control-btn.active:hover {
-    box-shadow: 0 15px 40px rgba(0, 200, 100, 0.5);
+.action-btn.jump {
+    background: linear-gradient(135deg, #ff9500, #ff7700);
+    border-color: #ffb84d;
+}
+
+.action-btn.jump:hover {
+    box-shadow: 0 10px 30px rgba(255, 149, 0, 0.5);
 }
 
 .btn-status {
-    display: block;
+    display: none;
 }
 
 .welcome-section {
