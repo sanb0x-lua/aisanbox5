@@ -44,14 +44,15 @@ function init() {
     // Логика для автоматического нажатия W в игре
     let isAutoPressActive = false;
     let autoPressInterval = null;
-    const gameFrame = document.getElementById('gameFrame');
+    const gameWrapper = document.getElementById('gameFrame');
     const toggleBtn = document.getElementById('toggleBtn');
     const btnStatus = document.querySelector('.btn-status');
 
-    function sendKeyToFrame(keyCode) {
+    function simulateKeyPress(keyCode) {
         try {
-            const event = new KeyboardEvent('keydown', {
-                key: keyCode === 87 ? 'w' : 'W',
+            // Создаем события для документа
+            const keyDownEvent = new KeyboardEvent('keydown', {
+                key: 'w',
                 code: 'KeyW',
                 keyCode: 87,
                 which: 87,
@@ -59,21 +60,32 @@ function init() {
                 cancelable: true
             });
             
-            if (gameFrame && gameFrame.contentDocument) {
-                gameFrame.contentDocument.dispatchEvent(event);
-                gameFrame.contentDocument.body.dispatchEvent(event);
+            const keyUpEvent = new KeyboardEvent('keyup', {
+                key: 'w',
+                code: 'KeyW',
+                keyCode: 87,
+                which: 87,
+                bubbles: true,
+                cancelable: true
+            });
+            
+            // Отправляем в разные цели
+            if (window && window.document) {
+                window.document.dispatchEvent(keyDownEvent);
+                window.document.body.dispatchEvent(keyDownEvent);
+                document.dispatchEvent(keyDownEvent);
             }
             
-            // Также пытаемся через contentWindow
-            if (gameFrame && gameFrame.contentWindow) {
-                gameFrame.contentWindow.dispatchEvent(event);
-                if (gameFrame.contentWindow.document) {
-                    gameFrame.contentWindow.document.dispatchEvent(event);
-                    gameFrame.contentWindow.document.body.dispatchEvent(event);
+            setTimeout(() => {
+                if (window && window.document) {
+                    window.document.dispatchEvent(keyUpEvent);
+                    window.document.body.dispatchEvent(keyUpEvent);
+                    document.dispatchEvent(keyUpEvent);
                 }
-            }
+            }, 100);
+            
         } catch (e) {
-            console.log('Невозможно отправить команду в iframe (возможно блокировка CORS)');
+            console.log('Ошибка при отправке клавиши:', e);
         }
     }
 
@@ -86,7 +98,7 @@ function init() {
             
             // Нажимаем W каждые 5 секунд
             autoPressInterval = setInterval(() => {
-                sendKeyToFrame(87); // 87 - код клавиши W
+                simulateKeyPress(87);
             }, 5000);
         } else {
             toggleBtn.classList.remove('active');
